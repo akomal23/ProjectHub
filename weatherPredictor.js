@@ -1,3 +1,5 @@
+//theaiplayground.com is a website developed by campk12 where you can code in Javascript to make real time interesting chatbots
+//below is the code which generates weather predictor bot
 
 Bot.send("Hello!! I am a weather predictor Bot. Please enter the name of your city! ");
 async function respond(inputText){

@@ -1,6 +1,8 @@
 //theaiplayground.com is a website developed by campk12 where you can code in Javascript to make real time interesting chatbots
 //below is the code which generates cool jumble word game
 
+//Go to Chat bot: https://theaiplayground.com/agrawalkomal78/bot/JubleWord-Game/view 
+
 let score = 0;
 let activeWord;
 let introMessageShown = false;
@@ -130,4 +132,3 @@ function reset() {
     currentLevel = 'easy';
 }
 
-//Go to Chat bot: https://theaiplayground.com/agrawalkomal78/bot/JubleWord-Game/view 

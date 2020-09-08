@@ -1,0 +1,131 @@
+//theaiplayground.com is a website developed by campk12 where you can code in Javascript to make real time interesting chatbots
+//below is the code which generates cool jumble word game
+
+let score = 0;
+let activeWord;
+let introMessageShown = false;
+let started = false;
+let timerStarted = false;
+let currentLevel = 'easy';
+let times = 0;
+const MAX_TIMES = 5;
+const COMMANDS = ['S', 's', 'V', 'v', 'X', 'x', 'R', 'r'];
+ 
+let level = {
+    easy: {
+        value: 1,
+        minWordCount: 3,
+        maxWordCount: 4,
+        list: ["ABLE", "ACID", "ACTS", "ADD", "ADDS", "AGES", "AGO", "AIM", "ALSO", "AND", "ANT", "ANY", "APE", "APPS", "ARE", "AREA", "ARMS", "ARMY", "ARTS", "ASK", "ATE", "AUTO", "AWAY", "AWE", "BABY", "BACK", "BAD", "BAG", "BAGS", "BALL", "BAN", "BAND", "BANK", "BAR", "BARS", "BASE", "BAT", "BAY", "BEAT", "BEE", "BEEN", "BEER", "BEG", "BELT", "BEST", "BET", "BID", "BIG", "BIKE", "BILL", "BIRD", "BIT", "BLOG", "BLUE", "BOAT", "BODY", "BONE", "BOOK", "BORN", "BOSS", "BOTH", "BOWL", "BOY", "BOYS", "BUG", "BUN", "BUS", "BUSY", "BUT", "BUY", "CAKE", "CALL", "CAME", "CAMP", "CAN", "CAR", "CARD", "CARE", "CARS", "CASE", "CASH", "CAST", "CAT", "CATS", "CELL", "CENT", "CITY", "CLUB", "CODE", "COLD", "COME", "COOK", "COOL", "COPY", "CORE", "COST", "COW", "CREW", "CUP", "CUT", "CUTE", "DARK", "DATA", "DATE", "DAY", "DAYS", "DEAD", "DEAL", "DEBT", "DECK", "DEEP", "DESK", "DID DIE", "DIED", "DIET", "DIG", "DIP", "DISH", "DOES", "DOG", "DOGS", "DONE", "DOOR", "DOSE", "DOT", "DOWN", "DRAW", "DROP", "DRUG", "DRY", "DUAL", "DUG", "DUST", "DUTY", "EACH", "EAR", "EARN", "EASE", "EAST", "EASY", "EAT", "EDGE", "EDIT", "EEL", "EGGS", "ELSE", "END", "ENDS", "ERA", "EVEN", "EVER", "EXAM", "EYES", "FACE", "FACT", "FAIL", "FAIR", "FALL", "FAN", "FANS", "FAR", "FARM", "FAST", "FAT", "FEAR", "FEED", "FEEL", "FEES", "FEET", "FELL", "FELT", "FEW", "FILE", "FILL", "FILM", "FIND", "FINE", "FIRE", "FIRM", "FISH", "FIT", "FITS", "FIVE", "FIX", "FLAG", "FLAT", "FLY", "FOG", "FOX", "FRY", "FUN", "FUR", "GAL", "GAP", "GAS", "GAY", "GEM", "GET", "GIG", "GIN", "GOD", "GOT", "GUM", "GUN", "GUT", "GUY", "GYM", "HAD", "HAM", "HAS", "HAT", "HEN", "HER", "HEX", "HEY", "HIM", "HIP", "HIS", "HIT", "HOP", "HOT", "HOW", "HUE", "HUG", "HUM", "HUT", "ICE", "ICY", "ILL", "IRK", "JAB", "JAM", "JAR", "JAW", "JET", "JEW", "JIG", "JOB", "JOG", "JOT", "KEY", "KID", "KIT", "LAP", "LAW", "LAY", "LEG", "LET", "LIE", "LIP", "LOG", "LOW", "MAD", "MAN", "MAP", "MAY", "MEN", "MET", "MIX", "MOB", "MOP", "MOW", "NAG", "NAP", "NET", "NEW", "NIP", "NOD", "NOT", "NOW NUT", "ODD", "OFF", "OIL", "OLD", "ONE", "OUR", "OUT", "OWE", "OWN", "PAT", "PAW", "PEE", "PET", "PIE", "PIG", "PIN", "POT", "PRY", "PUN", "PUT", "RAG", "RAN", "RAY", "RIP", "ROB", "ROT", "ROW", "RUG RUN", "SAD", "SAG", "SAT", "SAW", "SAY", "SEA", "SEE", "SET", "SEW", "SHE", "SHY", "SIP", "SIT", "SIX", "SKY", "SLY", "SON", "SPY", "SUN", "TAG", "TAP", "TAR", "TEN", "TIE", "TIP", "TOO", "TOP", "TOY", "TRY", "TUG", "TWO", "USE", "VAN", "VET", "VEX", "VOW", "WAG", "WAR", "WAS", "WAY", "WET", "WHO", "WHY", "WIG", "YES", "YET", "YIP", "YOU", "ZIP", "ZIT", "ZOO"]
+    },
+    medium: {
+        value: 2,
+        minWordCount: 4,
+        maxWordCount: 5,
+        list: ["ABOUT", "ABOVE", "ABUSE", "ADDED", "ADULT", "AFTER", "AGAIN", "AGENT", "AGREE", "AHEAD", "ALBUM", "ALIVE", "ALLOW", "ALONE", "ALONG", "AMONG", "ANGLE", "APART", "APPLE", "APPLY", "AREAS", "ARRAY", "ASIDE", "ASKED", "ASSET", "AUDIO", "AVOID", "AWARD", "AWARE", "BANKS", "BASED", "BASIC", "BASIS", "BEACH", "BEGAN", "BEGIN", "BEING", "BELOW", "BIBLE", "BILLS", "BIRDS", "BIRTH", "BLACK", "BLADE", "BLOCK", "BLOOD", "BOARD", "BONUS", "BOOKS", "BOXES", "BRAIN", "BRAND", "BREAD", "BREAK", "BRIEF", "BRING", "BROAD", "BROKE", "BROWN", "BUILD", "BUILT", "BUNCH", "CABLE", "CALLS", "CARDS", "CARRY", "CASES", "CATCH", "CAUSE", "CELLS", "CHAIN", "CHAIR", "CHART", "CHEAP", "CHECK", "CHEST", "CHIEF", "CHILD", "CHOSE", "CIVIL", "CLAIM", "CLASS", "CLEAN", "CLEAR", "CLICK", "CLOSE", "CLOUD", "CLUBS", "COACH", "COAST", "CODES", "COLOR", "COMES", "COSTS", "COULD", "COUNT", "COURT", "COVER", "CRAFT", "CRAZY", "CREAM", "CRIME", "CROSS", "CROWD", "CROWN", "CYCLE", "DAILY", "DANCE", "DATES", "DEATH", "DEPTH", "DOING", "DOORS", "DOUBT", "DRAFT", "DRAWN", "DREAM", "DRESS", "DRINK", "DRIVE", "DRUGS", "EARLY", "EARTH", "EIGHT", "EMAIL", "EMPTY", "ENDED", "ENEMY", "ENJOY", "ENTER", "ENTRY", "EQUAL", "ERROR", "EVENT", "EVERY", "EXACT", "EXIST", "EXTRA", "FACTS", "FAITH", "FEELS", "FEWER", "FIELD", "FIFTH", "FIGHT", "FILED", "FILES"]
+    },
+    hard: {
+        value: 3,
+        minWordCount: 5,
+        maxWordCount: 10,
+        list: ["ABROAD", "ACCEPT", "ACCESS", "ACROSS", "ACTING", "ACTION", "ACTIVE", "ACTUAL", "ADVICE", "ADVISE", "AFFECT", "AFFORD", "AFRAID", "AGENCY", "AGENDA", "ALMOST", "ALWAYS", "AMOUNT", "ANIMAL", "ANNUAL", "ANSWER", "ANYONE", "ANYWAY", "APPEAL", "APPEAR", "AROUND", "ARRIVE", "ARTIST", "ASPECT", "ASSESS", "ASSIST", "ASSUME", "ATTACK", "ATTEND", "AUGUST", "AUTHOR", "AVENUE", "BACKED", "BARELY", "BATTLE", "BEAUTY", "BECAME", "BECOME", "BEFORE", "BEHALF", "BEHIND", "BELIEF", "BELONG", "BERLIN", "BETTER", "BEYOND", "BISHOP", "BORDER", "BOTTLE", "BOTTOM", "BOUGHT", "BRANCH", "BREATH", "BRIDGE", "BRIGHT", "BROKEN", "BUDGET", "BURDEN", "BUREAU", "BUTTON", "CAMERA", "CANCER", "CANNOT", "CARBON", "CAREER", "CASTLE", "CASUAL", "CAUGHT", "CENTER", "CENTRE", "CHANCE", "CHANGE", "CHARGE", "CHOICE", "CHOOSE", "CHOSEN", "CHURCH", "CIRCLE", "CLIENT", "CLOSED", "CLOSER", "COFFEE", "COLUMN", "COMBAT", "COMING", "COMMON", "COMPLY", "COPPER", "CORNER", "COSTLY", "COUNTY", "COUPLE", "COURSE", "COVERS", "CREATE", "CREDIT", "CRISIS", "CUSTOM", "DAMAGE", "DANGER", "DEALER", "DEBATE", "DECADE", "DECIDE", "DEFEAT", "DEFEND", "DEFINE", "DEGREE", "DEMAND", "DEPEND", "DEPUTY", "DESERT", "DESIGN", "DESIRE", "DETAIL", "DETECT", "DEVICE", "DIFFER", "DINNER", "DIRECT", "DOCTOR", "DOLLAR", "DOMAIN", "DOUBLE", "DRIVEN", "DRIVER", "DURING", "EASILY", "EATING", "EDITOR", "EFFECT", "EFFORT", "EIGHTH", "EITHER", "ELEVEN", "EMERGE", "EMPIRE", "EMPLOY", "ENABLE", "ENDING", "ENERGY", "ENGAGE", "ENGINE", "ENOUGH", "ENSURE", "ENTIRE", "ENTITY", "EQUITY", "ESCAPE", "ESTATE", "ETHNIC", "EXCEED", "EXCEPT", "EXCESS", "EXPAND", "EXPECT", "EXPERT", "EXPORT", "EXTEND", "EXTENT", "FABRIC", "FACING", "FACTOR", "FAILED", "FAIRLY", "FALLEN", "FAMILY", "FAMOUS", "FATHER", "FELLOW", "FEMALE", "FIGURE", "FILING", "FINGER", "FINISH", "FISCAL", "FLIGHT", "FLYING", "FOLLOW", "FORCED", "FOREST", "FORGET", "FORMAL", "FORMAT", "FORMER", "FOSTER", "FOUGHT", "FOURTH", "FRENCH", "FRIEND", "FUTURE", "GARDEN", "GATHER", "GENDER", "GERMAN", "GLOBAL", "GOLDEN", "GROUND", "GROWTH", "GUILTY", "HANDED", "HANDLE", "HAPPEN", "HARDLY", "HEADED", "HEALTH", "HEIGHT", "HIDDEN", "HOLDER", "HONEST", "IMPACT", "IMPORT", "INCOME", "INDEED", "INJURY", "INSIDE", "INTEND", "INTENT", "INVEST", "ISLAND", "ITSELF", "JERSEY", "JOSEPH", "JUNIOR", "KILLED", "LABOUR", "LATEST", "LATTER", "LAUNCH", "LAWYER", "LEADER", "LEAGUE", "LEAVES", "LEGACY", "LENGTH", "LESSON", "LETTER", "LIGHTS", "LIKELY", "LINKED", "LIQUID", "LISTEN", "LITTLE", "LIVING", "LOSING", "LUCENT", "LUXURY", "MAINLY", "MAKING", "MANAGE", "MANNER", "MANUAL", "MARGIN", "MARINE", "MARKED", "MARKET", "MARTIN", "MASTER", "MATTER", "MATURE", "MEDIUM", "MEMBER", "MEMORY", "MENTAL", "MERELY", "MERGER"]
+    }
+};
+ 
+ 
+ 
+let random = i => Math.floor(Math.random() * i);
+ 
+let jumbleWord = (word = '') => {
+    let shufledWord = word.split('').sort(function () { return 0.5 - Math.random(); }).join('');
+    if (shufledWord === word) {
+        shufledWord = jumbleWord(word);
+    }
+    return shufledWord;
+};
+ 
+let wordGame = (lvl = 'easy') => {
+    started = true;
+    let list = level[lvl].list;
+    let index = random(list.length);
+    activeWord = list[index];
+    console.log("Word Chosen:", index, activeWord);
+    Bot.send(jumbleWord(activeWord));
+};
+ 
+let startMessage = () => {
+    Bot.send('Welcome to Jumbly Bumbly ! Re-arrange the letter to form a valid word.');
+    Bot.send('Press "X" to Exit');
+    Bot.send('Press "V" to View score');
+    Bot.send('Press "R" to Re-start');
+    Bot.send('Press "S" to start');
+    // Bot.send('Complete as many as you can in 30 seconds.');
+    Bot.send(`You have got ${MAX_TIMES} lifeline.`);
+    introMessageShown = true;
+};
+ Bot.send("Say hi to begin..");
+async function respond(inputText) {
+ 
+    if (!introMessageShown) {
+        startMessage();
+        return;
+    }
+ 
+    if (!started && !COMMANDS.includes(inputText)) {
+        Bot.send('Press "S" to start or "X" to exit');
+        return;
+    }
+ 
+    if(times == MAX_TIMES) {
+        inputText = 'X';
+    }
+ 
+    switch (inputText) {
+        case 'S':
+        case 's':           
+            wordGame(currentLevel);
+            break;
+        case 'R':
+        case 'r':
+            reset();
+            startMessage();
+            break;
+        case 'V':
+        case 'v':
+            Bot.send(`Your score is ${score}`);
+            break;
+        case 'X':
+        case 'x':
+            Bot.send(`Your score is ${score}`);
+            reset();
+            Bot.send(`There is lot we can do together, see you soon again...`);
+            break;
+        default:
+            if (activeWord === inputText.toUpperCase()) {
+                score++;
+				Bot.send("You got it correct 👏")
+                if(score > 2) {
+                    currentLevel = 'medium';
+                } else if(score > 4) {
+                    currentLevel = 'hard';
+                }
+            } else {
+                ++times;
+                Bot.send(`Oops it was wrong 👎. The correct answer was ${activeWord}`);
+            }
+            Bot.send('Moving to next jumbler');
+            wordGame(currentLevel);
+            break;
+    }
+}
+ 
+ 
+function reset() {
+    score = 0;
+    times = 0;
+    activeWord = undefined;
+    introMessageShown = false;
+    started = false;
+    timerStarted = false;
+    currentLevel = 'easy';
+}

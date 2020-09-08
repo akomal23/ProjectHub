@@ -129,3 +129,5 @@ function reset() {
     timerStarted = false;
     currentLevel = 'easy';
 }
+
+//Go to Chat bot: https://theaiplayground.com/agrawalkomal78/bot/JubleWord-Game/view 
